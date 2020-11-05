@@ -10,5 +10,9 @@ Using a Jetbot (Sparkfun kit).
 
 ![I tried](resources/traffic-lights.jpg)
 
+They will be controlled by an arduino
+
+![working](resources/traffic-lights-working.jpeg)
+
 - Stop signs
 - Speed bumps
