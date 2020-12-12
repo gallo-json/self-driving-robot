@@ -3,6 +3,8 @@ import cv2
 import time
 
 net = cv2.dnn.readNet("backup/yolov4-custom_best.weights", "/opt/darknet/cfg/yolov4-custom.cfg")
+net.setPreferableBackend(cv2.dnn.DNN_BACKEND_CUDA)
+net.setPreferableTarget(cv2.dnn.DNN_TARGET_CUDA)
 
 classes = ["stop_sign"]
 layer_names = net.getLayerNames()
