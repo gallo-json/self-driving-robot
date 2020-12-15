@@ -2,7 +2,7 @@ import numpy as np
 import cv2
 import time
 
-net = cv2.dnn.readNet("backup/yolov4-custom_best.weights", "/opt/darknet/cfg/yolov4-custom.cfg")
+net = cv2.dnn.readNet("weights/train-2-only-stop-sign-colab/yolov4-custom-colab_best.weights", "conf/yolov4-custom.cfg")
 net.setPreferableBackend(cv2.dnn.DNN_BACKEND_CUDA)
 net.setPreferableTarget(cv2.dnn.DNN_TARGET_CUDA)
 
