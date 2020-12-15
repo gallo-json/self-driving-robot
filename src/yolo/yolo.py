@@ -63,9 +63,7 @@ while(True):
             cv2.rectangle(frame, (x, y), (x + w, y + h), color, 2)
             cv2.putText(frame, label + " " + str(round(conf, 2)), (x, y + 30), font, 3, color, 3)
 
-    elapsed_time = time.time() - starting_time
-    fps = frame_id / elapsed_time
-    cv2.putText(frame, "FPS: " + str(round(fps, 2)), (10, 50), font, 2, (0, 0, 0), 1)
+    cv2.putText(frame, "FPS: " + str(cap.get(cv2.CAP_PROP_FPS)), (10, 50), font, 2, (0, 0, 0), 1)
 
     cv2.imshow("Image", frame)
     
