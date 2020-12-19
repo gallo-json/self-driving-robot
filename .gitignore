@@ -1,2 +1,5 @@
 *.pth
 *.h5
+*.weights
+*.conv.137
+src/yolo/backup

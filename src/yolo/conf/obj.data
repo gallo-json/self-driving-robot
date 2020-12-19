@@ -1,0 +1,5 @@
+classes = 1
+train = /home/jose/Programming/aiml/Data/OIDv4_ToolKit/data/train.txt
+test = /home/jose/Programming/aiml/Data/OIDv4_ToolKit/data/test.txt
+names = /home/jose/Programming/aiml/Projects/self-driving-robot/src/yolo/obj.names
+backup = /home/jose/Programming/aiml/Projects/self-driving-robot/src/yolo/backup
