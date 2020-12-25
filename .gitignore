@@ -1,6 +1,9 @@
+# Weight files are too big
 *.pth
 *.pt
 *.h5
 *.weights
 *.conv.137
-src/yolo/backup
+
+# Road following dataset
+src/road_following/dataset_xy
