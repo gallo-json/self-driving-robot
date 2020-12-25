@@ -1,4 +1,5 @@
 *.pth
+*.pt
 *.h5
 *.weights
 *.conv.137
