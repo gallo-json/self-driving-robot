@@ -4,6 +4,8 @@
 *.h5
 *.weights
 *.conv.137
+*.onnx
+*.trt
 
 # Road following dataset
 src/road_following/dataset_xy
