@@ -19,5 +19,7 @@ NVIDIA AI IOT already has source code for this. All that is left is to combine b
 ## Useful repositories
 
 JetBot: https://github.com/NVIDIA-AI-IOT/jetbot
+
 TensorRT demos: https://github.com/jkjung-avt/tensorrt_demos
+
 YOLO in PyTorch: https://github.com/ultralytics/yolov3/tree/archive
