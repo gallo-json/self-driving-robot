@@ -8,6 +8,15 @@
 
 Inference with only the darknet `.weights` file loaded by OpenCV performs very poorly (~0.8 FPS). To better the performance convert the Darknet YOLOv4 model to a PyTorch model or to a TensorRT engine.
 
+![](resources/YOLO-2-torch.png)
+
+PyTorch model reached __ FPS.
+
+![](resources/YOLO-2-tensorrt.png)
+
+TensorRT engine reached 5 FPS.
+
+
 ### On the computer SSHing into the Jetson Nano
 
 If worst comes to worst and the Nano cannot run the model smoothly, I can use my NVIDA GPU laptop that controls the Nano. The Nano sends the live camera feed to the laptop, the laptop does all the inference then sends back the labels where then the Nano parses that and moves the motors accordingly.
@@ -15,6 +24,12 @@ If worst comes to worst and the Nano cannot run the model smoothly, I can use my
 ## Road following
 
 NVIDIA AI IOT already has source code for this. All that is left is to combine both models.
+
+## Questions
+
+## Why can't you just use YOLOv4-tiny?
+
+Probably be better to do so.
 
 ## Useful repositories
 
