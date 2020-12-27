@@ -10,12 +10,11 @@ Inference with only the darknet `.weights` file loaded by OpenCV performs very p
 
 ![](resources/YOLO-2-torch.png)
 
-PyTorch model reached __ FPS.
+PyTorch model reached ~4 FPS.
 
 ![](resources/YOLO-2-tensorrt.png)
 
-TensorRT engine reached 5 FPS.
-
+TensorRT engine reached ~2 FPS.
 
 ### On the computer SSHing into the Jetson Nano
 
@@ -27,9 +26,17 @@ NVIDIA AI IOT already has source code for this. All that is left is to combine b
 
 ## Questions
 
-## Why can't you just use YOLOv4-tiny?
+### Why can't you just use YOLOv4-tiny?
 
 Probably be better to do so.
+
+### Why is the PyTorch model better than the TensorRT engine?
+
+I have no clue, they're using same CUDA device, same inference dimensions, same YOLO cfg file, etc. But I'm not complaining since its easier to deploy alongside the other road following PyTorch model.
+
+### If the PyTorch model is already better, can you make it even better by converting it to TensorRT?
+
+Torch2trt natively does not support some of the layers in YOLO, which means I would have to create layer converters and I do not want to go down that rabbit hole. Maybe for a future project.
 
 ## Useful repositories
 
