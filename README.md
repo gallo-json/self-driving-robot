@@ -14,7 +14,7 @@ PyTorch model reached ~4 FPS.
 
 ![](resources/YOLO-2-tensorrt.png)
 
-TensorRT engine reached ~2 FPS.
+FP16 TensorRT engine reached ~2 FPS.
 
 ### On the computer SSHing into the Jetson Nano
 
