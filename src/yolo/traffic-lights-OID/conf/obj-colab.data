@@ -1,0 +1,5 @@
+classes = 1
+train = /content/drive/MyDrive/darknet/traffic-lights-OID/train-colab.txt
+test = /content/drive/MyDrive/darknet/traffic-lights-OID/test-colab.txt
+names = /content/drive/MyDrive/darknet/traffic-lights-OID/obj.names
+backup = /content/drive/MyDrive/darknet/traffic-lightsv/backup
