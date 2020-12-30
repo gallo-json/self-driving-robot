@@ -2,11 +2,11 @@ import numpy as np
 import cv2
 import time
 
-net = cv2.dnn.readNet("traffic-lights-BOSCH/weights/yolov4-traffic-lights-BOSCH-416.weights", "traffic-lights-BOSCH/conf/yolov4-custom-colab.cfg")
+net = cv2.dnn.readNet("traffic-lights-OID/weights/yolov4-custom_best.weights", "traffic-lights-OID/conf/yolov4-custom.cfg")
 net.setPreferableBackend(cv2.dnn.DNN_BACKEND_CUDA)
 net.setPreferableTarget(cv2.dnn.DNN_TARGET_CUDA)
 
-classes = ['Red', 'Green', 'Yellow', 'off']
+classes = ["Traffic light"]
 layer_names = net.getLayerNames()
 output_layers = [layer_names[i[0] - 1] for i in net.getUnconnectedOutLayers()]
 
