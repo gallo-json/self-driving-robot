@@ -8,6 +8,9 @@ import torchvision
 import torchvision.transforms as transforms
 import torch.nn.functional as F
 import PIL.Image
+from jetbot import Robot
+
+robot = Robot()
 
 ### LOAD MODEL
 
@@ -41,13 +44,24 @@ cv2.createTrackbar("steering kd", "Sliders", 0, 100, empty)
 cv2.createTrackbar("steering bias", "Sliders", 50, 100, empty) 
 
 ### INFERENCE
+angle = 0.0
+angle_last = 0.0
 
 def infer(image, speed_gain, steering_gain, steering_kd, steering_bias):
+    global angle, angle_last
     xy = model(preprocess(image)).detach().float().cpu().numpy().flatten()
     x = xy[0]
     y = (0.5 - xy[1]) / 2.0
 
-    
+    angle = np.arctan2(x, y)
+    pid = angle * steering_gain + (angle - angle_last) * steering_kd
+    angle_last = angle
+
+    steering_value = pid + steering_bias
+
+    robot.left_motor.value = max(min(speed_gain + steering_value, 1.0), 0.0)
+    robot.right_motor.value = max(min(speed_gain - steering_value, 1.0), 0.0)
+
     return (x * 224)/2, (xy[1] * 224) / 2
 
 ## CAMERA
