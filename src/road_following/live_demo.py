@@ -44,10 +44,10 @@ cv2.createTrackbar("steering bias", "Sliders", -100, 100, empty)
 
 def infer(image, speed_gain, steering_gain, steering_kd, steering_bias):
     xy = model(preprocess(image)).detach().float().cpu().numpy().flatten()
-    x = xy[0]
-    y = (0.5 - xy[1]) / 2.0
-
-    return x, y
+    x = xy[0] * 224
+    # y = (0.5 - xy[1]) / 2.0
+    y = xy[1] * 224
+    return x/2 , y/2
 
 ## CAMERA
 
@@ -68,8 +68,10 @@ while True:
     steering_bias = cv2.getTrackbarPos("steering bias", "Sliders") / 100
 
     x, y = infer(frame, speed_gain, steering_gain, steering_kd, steering_bias)
+    
+    print(x, y)
 
-    cv2.circle(frame, (x, y), 8, (0, 255, 0), 3)
+    cv2.circle(frame, (int(x), int(y)), 8, (0, 255, 0), 3)
 
     fps = 1/(new_frame_time-prev_frame_time) 
     prev_frame_time = new_frame_time 
