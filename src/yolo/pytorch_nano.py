@@ -1,7 +1,7 @@
 import sys
 import argparse
-repo_path = '/home/jose/Programming/aiml/tools/yolov3-archive'
-# repo_path = '/home/jetbot/yolov3-archive'
+#repo_path = '/home/jose/Programming/aiml/tools/yolov3-archive'
+repo_path = '/home/jetbot/yolov3-archive'
 sys.path.insert(1, repo_path)
 
 from models import Darknet
@@ -83,14 +83,14 @@ def detect(save_img=False):
                     plot_one_box(xyxy, im0, label=label, color=colors[int(cls)])
 
             # Print time (inference + NMS)
-            print('%sDone. (%.3fs)' % (s, t2 - t1))
+            print('%sDone. (%.3f FPS)' % (s, 1 / (t2 - t1)))
 
             # Stream results
             cv2.imshow(p, im0)
             if cv2.waitKey(1) == ord('q'):  # q to quit
                 raise StopIteration
 
-    print('Done. (%.3fs)' % (time.time() - t0))
+    print('Done. (%.3f FPS)' % (1 / (time.time() - t0)))
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
