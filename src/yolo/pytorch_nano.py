@@ -1,13 +1,58 @@
 import sys
 import argparse
-#repo_path = '/home/jose/Programming/aiml/tools/yolov3-archive'
-repo_path = '/home/jetbot/yolov3-archive'
+repo_path = '/home/jose/Programming/aiml/tools/yolov3-archive'
+#repo_path = '/home/jetbot/yolov3-archive'
 sys.path.insert(1, repo_path)
 
 from models import Darknet
 from utils.datasets import *
 from utils.utils import *
 
+import torch
+import torchvision
+import torchvision.transforms as transforms
+import torch.nn.functional as F
+import PIL.Image
+
+### ROAD FOLLOWING
+model_road_following = torchvision.models.resnet18(pretrained=False)
+model_road_following.fc = torch.nn.Linear(512, 2)
+model_road_following.load_state_dict(torch.load('best_steering_model_xy.pth'))
+
+device = torch.device('cuda')
+model_road_following = model_road_following.to(device)
+model_road_following = model_road_following.eval().half()
+
+mean = torch.Tensor([0.485, 0.456, 0.406]).cuda().half()
+std = torch.Tensor([0.229, 0.224, 0.225]).cuda().half()
+
+def preprocess(image):
+    image = PIL.Image.fromarray(image)
+    image = transforms.functional.to_tensor(image).to(device).half()
+    image.sub_(mean[:, None, None]).div_(std[:, None, None])
+    return image[None, ...]
+
+angle = 0.0
+angle_last = 0.0
+
+def find_optimal_path(image):
+    global angle, angle_last
+    xy = model(preprocess(image)).detach().float().cpu().numpy().flatten()
+    x = xy[0]
+    y = (0.5 - xy[1]) / 2.0
+    '''
+    angle = np.arctan2(x, y)
+    pid = angle * steering_gain + (angle - angle_last) * steering_kd
+    angle_last = angle
+
+    steering_value = pid + steering_bias
+
+    robot.left_motor.value = max(min(speed_gain + steering_value, 1.0), 0.0)
+    robot.right_motor.value = max(min(speed_gain - steering_value, 1.0), 0.0)
+    '''
+    return (x * 224)/2, (xy[1] * 224) / 2
+
+### YOLO
 stop_sign_area_thres = 0
 
 def detect(save_img=False):
@@ -17,17 +62,17 @@ def detect(save_img=False):
     device = torch_utils.select_device(opt.device)
 
     # Initialize model
-    model = Darknet(opt.cfg, imgsz)
+    model_yolo = Darknet(opt.cfg, imgsz)
 
     # Load weights
-    model.load_state_dict(torch.load(weights, map_location=device)['model'])
+    model_yolo.load_state_dict(torch.load(weights, map_location=device)['model'])
 
     # Eval mode
-    model.to(device).eval()
+    model_yolo.to(device).eval()
 
     # Half precision
     half = half and device.type != 'cpu'  # half precision only supported on CUDA
-    if half: model.half()
+    if half: model_yolo.half()
 
     torch.backends.cudnn.benchmark = True  # set True to speed up constant image size inference
     dataset = LoadStreams(source, img_size=imgsz)
@@ -39,7 +84,7 @@ def detect(save_img=False):
     # Run inference
     t0 = time.time()
     img = torch.zeros((1, 3, imgsz, imgsz), device=device)  # init img
-    _ = model(img.half() if half else img.float()) if device.type != 'cpu' else None  # run once
+    _ = model_yolo(img.half() if half else img.float()) if device.type != 'cpu' else None  # run once
     for path, img, im0s, vid_cap in dataset:
         img = torch.from_numpy(img).to(device)
         img = img.half() if half else img.float()  # uint8 to fp16/32
@@ -49,7 +94,7 @@ def detect(save_img=False):
 
         # Inference
         t1 = torch_utils.time_synchronized()
-        pred = model(img, augment=opt.augment)[0]
+        pred = model_yolo(img, augment=opt.augment)[0]
         t2 = torch_utils.time_synchronized()
 
         # to float
@@ -85,6 +130,8 @@ def detect(save_img=False):
             # Print time (inference + NMS)
             print('%sDone. (%.3f FPS)' % (s, 1 / (t2 - t1)))
 
+            x, y = find_optimal_path(img)
+            cv2.circle(im0, (int(x), int(y)), 8, (0, 255, 0), 3)
             # Stream results
             cv2.imshow(p, im0)
             if cv2.waitKey(1) == ord('q'):  # q to quit
