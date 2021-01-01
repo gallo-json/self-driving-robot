@@ -86,9 +86,6 @@ def detect(save_img=False):
     img = torch.zeros((1, 3, imgsz, imgsz), device=device)  # init img
     _ = model_yolo(img.half() if half else img.float()) if device.type != 'cpu' else None  # run once
     for path, img, im0s, vid_cap in dataset:
-        img_cpy = img.reshape((224, 224, 3))
-        x, y = find_optimal_path(img_cpy)
-
         img = torch.from_numpy(img).to(device)
         img = img.half() if half else img.float()  # uint8 to fp16/32
         img /= 255.0  # 0 - 255 to 0.0 - 1.0
@@ -132,11 +129,12 @@ def detect(save_img=False):
 
             # Print time (inference + NMS)
             print('%sDone. (%.3f FPS)' % (s, 1 / (t2 - t1)))
-
+            
+            x, y = find_optimal_path(im0)
             print(int(x), int(y))
             cv2.circle(im0, (int(x), int(y)), 8, (0, 255, 0), 3)
             # Stream results
-            cv2.imshow(p,img_cpy)
+            cv2.imshow(p,im0)
             if cv2.waitKey(1) == ord('q'):  # q to quit
                 raise StopIteration
 
