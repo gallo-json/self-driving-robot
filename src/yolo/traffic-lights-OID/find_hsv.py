@@ -34,7 +34,9 @@ def stackImages(scale, imgArray):
         ver = hor
     return ver
 
-img = cv2.imread("pictures/green-cropped.jpg")
+red = cv2.imread("pictures/red-cropped.jpg")
+yellow = cv2.imread("pictures/yellow-cropped.jpg")
+green = cv2.imread("pictures/green-cropped.jpg")
 
 cv2.namedWindow("Trackbars")
 cv2.resizeWindow("Trackbars", 640, 240)
@@ -49,9 +51,14 @@ cv2.createTrackbar("Value min", "Trackbars", 0, 255, empty) # default start valu
 cv2.createTrackbar("Value max", "Trackbars", 255, 255, empty) # default start value: 255
 
 while True:
-    blurred_img = cv2.GaussianBlur(img, (11, 11), 0)
+    red_blurred = cv2.GaussianBlur(red, (11, 11), 0)
+    red_hsv = cv2.cvtColor(red_blurred, cv2.COLOR_BGR2HSV)
 
-    hsv_img = cv2.cvtColor(blurred_img, cv2.COLOR_BGR2HSV)
+    yellow_blurred = cv2.GaussianBlur(yellow, (11, 11), 0)
+    yellow_hsv = cv2.cvtColor(yellow_blurred, cv2.COLOR_BGR2HSV)
+
+    green_blurred = cv2.GaussianBlur(green, (11, 11), 0)
+    green_hsv = cv2.cvtColor(green_blurred, cv2.COLOR_BGR2HSV)
 
     hue_min = cv2.getTrackbarPos("Hue min", "Trackbars")
     hue_max = cv2.getTrackbarPos("Hue max", "Trackbars")
@@ -65,11 +72,11 @@ while True:
     lower = np.array([hue_min, sat_min, val_min])
     upper = np.array([hue_max, sat_max, val_max])
 
-    mask = cv2.inRange(hsv_img, lower, upper)
+    red_mask = cv2.inRange(red_hsv, lower, upper)
+    yellow_mask = cv2.inRange(yellow_hsv, lower, upper)
+    green_mask = cv2.inRange(green_hsv, lower, upper)
 
-    bitwise_img = cv2.bitwise_and(img, img, mask=mask)
-
-    cv2.imshow("Out", stackImages(0.5, ([img, bitwise_img], [hsv_img, mask])))
+    cv2.imshow("Out", stackImages(0.5, ([red, red_hsv, red_mask], [yellow, yellow_hsv, yellow_mask], [green, green_hsv, green_mask])))
 
     if cv2.waitKey(1) & 0xFF == ord('n'):
         break

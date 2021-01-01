@@ -7,15 +7,16 @@ net = cv2.dnn.readNet("weights/yolov4-custom_best.weights", "conf/yolov4-custom.
 net.setPreferableBackend(cv2.dnn.DNN_BACKEND_CUDA)
 net.setPreferableTarget(cv2.dnn.DNN_TARGET_CUDA)
 
-classes = ["Traffic light"]
 layer_names = net.getLayerNames()
 output_layers = [layer_names[i[0] - 1] for i in net.getUnconnectedOutLayers()]
 
-colors = np.random.uniform(0, 255, size=(len(classes), 3))
+red_color = (0, 0, 255)
+yellow_color = (255, 255, 0)
+green_color = (0, 255, 0)
 
 font = cv2.FONT_HERSHEY_PLAIN
 
-frame = cv2.imread('none.jpg')
+frame = cv2.imread('pictures/yellow.jpg')
 original = np.copy(frame)
 
 height, width, channels = frame.shape
@@ -47,25 +48,51 @@ for out in outs:
 
 indexes = cv2.dnn.NMSBoxes(boxes, confidences, 0.4, 0.6)
 
+lower = np.array([0, 0, 185])
+upper = np.array([179, 155, 255])
+
 for i in range(len(boxes)):
     if i in indexes:
         x, y, w, h = boxes[i]
-        label = str(classes[class_ids[i]])
-        color = colors[class_ids[i]]
         conf = confidences[i]
 
-        cv2.rectangle(frame, (x, y), (x + w, y + h), color, 2)
+        cropped_img = original[y - 2:y + h + 2, x - 2:x + w + 2]
+        hsv_img = cv2.cvtColor(cropped_img, cv2.COLOR_BGR2HSV)
+        mask = cv2.inRange(hsv_img, lower, upper)
+
+        contours, hierarchy = cv2.findContours(mask,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
+            # If we have at least one contour, look through each one and pick the biggest
+        if len(contours)>0:
+            largest = 0
+            area = 0
+            for i in range(len(contours)):
+                # get the area of the ith contour
+                temp_area = cv2.contourArea(contours[i])
+                # if it is the biggest we have seen, keep it
+                if temp_area > area:
+                    area = temp_area
+                    largest = i
+            # Compute the coordinates of the center of the largest contour
+            coordinates = cv2.moments(contours[largest])
+        biggest_area = cv2.contourArea(contours[largest])
+        target_y = int(coordinates['m01']/coordinates['m00'])
+
+        areas = cropped_img.shape[0] / 3
+
+        if target_y < areas:
+            cv2.rectangle(frame, (x, y), (x + w, y + h), red_color, 2)
+            print("red")
+        elif target_y > areas and target_y < areas * 2:
+            cv2.rectangle(frame, (x, y), (x + w, y + h), yellow_color, 2)
+            print("yellow")
+        elif target_y > areas * 2:
+            cv2.rectangle(frame, (x, y), (x + w, y + h), green_color, 2)
+            print("green")
+
         # cv2.putText(frame, label + " " + str(round(conf, 2)), (x, y + 30), font, 3, color, 1)
-        print(label)
         print(conf)
         
-#cv2.imshow("Image", frame)
+cv2.imshow("Image", frame)
 
-cropped_img = original[y - 2:y + h + 2, x - 2:x + w + 2]
-
-cv2.imwrite('none-cropped.jpg', cropped_img)
-
-
-#cv2.imshow("Cropped", cropped_img)
 # wait until any key is pressed
-#cv2.waitKey()
+cv2.waitKey()
