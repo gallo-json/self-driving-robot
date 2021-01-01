@@ -11,7 +11,7 @@ layer_names = net.getLayerNames()
 output_layers = [layer_names[i[0] - 1] for i in net.getUnconnectedOutLayers()]
 
 red_color = (0, 0, 255)
-yellow_color = (255, 255, 0)
+yellow_color = (255, 255, 255)
 green_color = (0, 255, 0)
 
 font = cv2.FONT_HERSHEY_PLAIN
@@ -56,9 +56,12 @@ for i in range(len(boxes)):
         x, y, w, h = boxes[i]
         conf = confidences[i]
 
+        sat_thres = 30
         cropped_img = original[y - 2:y + h + 2, x - 2:x + w + 2]
-        hsv_img = cv2.cvtColor(cropped_img, cv2.COLOR_BGR2HSV)
-        mask = cv2.inRange(hsv_img, lower, upper)
+        sat_img = cv2.cvtColor(cropped_img, cv2.COLOR_BGR2HSV)[...,1]
+        idx = (sat_img <= sat_thres)
+        mask = np.ones_like(sat_img)
+        mask[idx] = 0
 
         contours, hierarchy = cv2.findContours(mask,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
             # If we have at least one contour, look through each one and pick the biggest
