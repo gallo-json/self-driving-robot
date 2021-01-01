@@ -90,13 +90,13 @@ while(True):
 
         areas = cropped_img.shape[0] / 3
 
-        if target_y < areas:
+        if target_y <= areas + 2:
             cv2.rectangle(frame, (x, y), (x + w, y + h), red_color, 2)
             print("red")
-        elif target_y > areas and target_y < areas * 2:
+        elif target_y > areas - 2 and target_y < areas * 2 - 2:
             cv2.rectangle(frame, (x, y), (x + w, y + h), yellow_color, 2)
             print("yellow")
-        elif target_y > areas * 2:
+        elif target_y > areas * 2 + 2:
             cv2.rectangle(frame, (x, y), (x + w, y + h), green_color, 2)
             print("green")
 
