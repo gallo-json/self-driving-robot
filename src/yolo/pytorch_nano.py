@@ -1,7 +1,7 @@
 import sys
 import argparse
-repo_path = '/home/jose/Programming/aiml/tools/yolov3-archive'
-#repo_path = '/home/jetbot/yolov3-archive'
+#repo_path = '/home/jose/Programming/aiml/tools/yolov3-archive'
+repo_path = '/home/jetbot/yolov3-archive'
 sys.path.insert(1, repo_path)
 
 from models import Darknet
@@ -17,7 +17,7 @@ import PIL.Image
 ### ROAD FOLLOWING
 model_road_following = torchvision.models.resnet18(pretrained=False)
 model_road_following.fc = torch.nn.Linear(512, 2)
-model_road_following.load_state_dict(torch.load('best_steering_model_xy.pth'))
+model_road_following.load_state_dict(torch.load('../road_following/best_steering_model_xy.pth'))
 
 device = torch.device('cuda')
 model_road_following = model_road_following.to(device)
