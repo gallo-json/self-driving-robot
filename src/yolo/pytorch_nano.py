@@ -37,7 +37,7 @@ angle_last = 0.0
 
 def find_optimal_path(image):
     global angle, angle_last
-    xy = model(preprocess(image)).detach().float().cpu().numpy().flatten()
+    xy = model_road_following(preprocess(image)).detach().float().cpu().numpy().flatten()
     x = xy[0]
     y = (0.5 - xy[1]) / 2.0
     '''
@@ -136,7 +136,7 @@ def detect(save_img=False):
             print(int(x), int(y))
             cv2.circle(im0, (int(x), int(y)), 8, (0, 255, 0), 3)
             # Stream results
-            cv2.imshow(p, im0)
+            cv2.imshow(p,img_cpy)
             if cv2.waitKey(1) == ord('q'):  # q to quit
                 raise StopIteration
 
