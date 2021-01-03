@@ -59,7 +59,7 @@ for i in range(len(boxes)):
         sat_thres = 30
         cropped_img = original[y - 2:y + h + 2, x - 2:x + w + 2]
         sat_img = cv2.cvtColor(cropped_img, cv2.COLOR_BGR2HSV)[...,1]
-        idx = (sat_img <= sat_thres)
+        idx = (sat_img >= sat_thres)
         mask = np.ones_like(sat_img)
         mask[idx] = 0
 

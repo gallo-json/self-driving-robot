@@ -6,9 +6,6 @@ red_color = (0, 0, 255)
 yellow_color = (0, 255, 255)
 green_color = (0, 255, 0)
 
-lower = np.array([0, 0, 185])
-upper = np.array([179, 155, 255])
-
 net = cv2.dnn.readNet("weights/yolov4-custom_best.weights", "conf/yolov4-custom.cfg")
 net.setPreferableBackend(cv2.dnn.DNN_BACKEND_CUDA)
 net.setPreferableTarget(cv2.dnn.DNN_TARGET_CUDA)
@@ -69,8 +66,12 @@ while(True):
 
         cropped_img = frame[y - 2:y + h + 2, x - 2:x + w + 2]
         hsv_img = cv2.cvtColor(cropped_img, cv2.COLOR_BGR2HSV)
-        mask = cv2.inRange(hsv_img, lower, upper)
 
+        saturation_threshold=30
+        idx = hsv_img[:, :, 1] >= saturation_threshold
+        mask = np.ones_like(hsv_img[:, :, 1])
+        mask[idx] = 0
+        
         contours, hierarchy = cv2.findContours(mask,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
             # If we have at least one contour, look through each one and pick the biggest
         if len(contours)>0:
@@ -96,7 +97,7 @@ while(True):
         elif target_y > areas - 2 and target_y < areas * 2 - 2:
             cv2.rectangle(frame, (x, y), (x + w, y + h), yellow_color, 2)
             print("yellow")
-        elif target_y > areas * 2 + 2:
+        elif target_y >= areas * 2 + 2:
             cv2.rectangle(frame, (x, y), (x + w, y + h), green_color, 2)
             print("green")
 
