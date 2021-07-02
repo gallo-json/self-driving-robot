@@ -1,5 +1,0 @@
-classes = 4
-train = /content/drive/MyDrive/darknet/traffic-lights/train-colab.txt
-test = /content/drive/MyDrive/darknet/traffic-lights/test-colab.txt
-names = /content/drive/MyDrive/darknet/traffic-lights/obj.names
-backup = /content/drive/MyDrive/darknet/traffic-lights/backup
