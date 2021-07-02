@@ -14,44 +14,6 @@ import torchvision.transforms as transforms
 import torch.nn.functional as F
 import PIL.Image
 
-### ROAD FOLLOWING
-model_road_following = torchvision.models.resnet18(pretrained=False)
-model_road_following.fc = torch.nn.Linear(512, 2)
-model_road_following.load_state_dict(torch.load('../road_following/best_steering_model_xy.pth'))
-
-device = torch.device('cuda')
-model_road_following = model_road_following.to(device)
-model_road_following = model_road_following.eval().half()
-
-mean = torch.Tensor([0.485, 0.456, 0.406]).cuda().half()
-std = torch.Tensor([0.229, 0.224, 0.225]).cuda().half()
-
-def preprocess(image):
-    image = PIL.Image.fromarray(image)
-    image = transforms.functional.to_tensor(image).to(device).half()
-    image.sub_(mean[:, None, None]).div_(std[:, None, None])
-    return image[None, ...]
-
-angle = 0.0
-angle_last = 0.0
-
-def find_optimal_path(image):
-    global angle, angle_last
-    xy = model_road_following(preprocess(image)).detach().float().cpu().numpy().flatten()
-    x = xy[0]
-    y = (0.5 - xy[1]) / 2.0
-    '''
-    angle = np.arctan2(x, y)
-    pid = angle * steering_gain + (angle - angle_last) * steering_kd
-    angle_last = angle
-
-    steering_value = pid + steering_bias
-
-    robot.left_motor.value = max(min(speed_gain + steering_value, 1.0), 0.0)
-    robot.right_motor.value = max(min(speed_gain - steering_value, 1.0), 0.0)
-    '''
-    return (x * 224)/2, (xy[1] * 224) / 2
-
 ### YOLO
 stop_sign_area_thres = 0
 
@@ -129,11 +91,6 @@ def detect(save_img=False):
 
             # Print time (inference + NMS)
             print('%sDone. (%.3f FPS)' % (s, 1 / (t2 - t1)))
-            
-            x, y = find_optimal_path(im0)
-            print(int(x), int(y))
-            cv2.circle(im0, (int(x), int(y)), 8, (0, 255, 0), 3)
-            cv2.imshow(p, im0)
 
             if cv2.waitKey(1) == ord('q'):  # q to quit
                 raise StopIteration
@@ -142,9 +99,9 @@ def detect(save_img=False):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--cfg', type=str, default='cfg/yolov3-spp.cfg', help='*.cfg path')
-    parser.add_argument('--names', type=str, default='data/coco.names', help='*.names path')
-    parser.add_argument('--weights', type=str, default='weights/yolov3-spp-ultralytics.pt', help='weights path')
+    parser.add_argument('--cfg', type=str, default='conf/yolov4-custom-for-torch.cfg', help='*.cfg path')
+    parser.add_argument('--names', type=str, default='conf/obj.names', help='*.names path')
+    parser.add_argument('--weights', type=str, default='weights/yolov4-custom-for-torch_best.pt', help='weights path')
     parser.add_argument('--source', type=str, default='data/samples', help='source')  # input file/folder, 0 for webcam
     parser.add_argument('--img-size', type=int, default=512, help='inference size (pixels)')
     parser.add_argument('--conf-thres', type=float, default=0.3, help='object confidence threshold')
