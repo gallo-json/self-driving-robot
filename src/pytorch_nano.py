@@ -91,6 +91,7 @@ def detect(save_img=False):
 
             # Print time (inference + NMS)
             print('%sDone. (%.3f FPS)' % (s, 1 / (t2 - t1)))
+            cv2.imshow(p, im0)
 
             if cv2.waitKey(1) == ord('q'):  # q to quit
                 raise StopIteration
