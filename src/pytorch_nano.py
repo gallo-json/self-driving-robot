@@ -14,8 +14,7 @@ import torchvision.transforms as transforms
 import torch.nn.functional as F
 import PIL.Image
 
-### YOLO
-stop_sign_area_thres = 0
+stop_sign_area_thres = 30000
 
 def detect(save_img=False):
     imgsz = opt.img_size  # (320, 192) or (416, 256) or (608, 352) for (height, width)
@@ -39,12 +38,7 @@ def detect(save_img=False):
     torch.backends.cudnn.benchmark = True  # set True to speed up constant image size inference
     dataset = LoadStreams(source, img_size=imgsz)
 
-    # Get names and colors
-    names = load_classes(opt.names)
-    colors = [[random.randint(0, 255) for _ in range(3)] for _ in range(len(names))]
-
     # Run inference
-    t0 = time.time()
     img = torch.zeros((1, 3, imgsz, imgsz), device=device)  # init img
     _ = model_yolo(img.half() if half else img.float()) if device.type != 'cpu' else None  # run once
     for path, img, im0s, vid_cap in dataset:
@@ -68,40 +62,41 @@ def detect(save_img=False):
 
         # Process detections
         for i, det in enumerate(pred):  # detections for image i
-            p, s, im0 = path[i], '%g: ' % i, im0s[i].copy()
+            p, im0 = path[i], im0s[i].copy()
 
-            s += '%gx%g ' % img.shape[2:]  # print string
-            gn = torch.tensor(im0.shape)[[1, 0, 1, 0]]  #  normalization gain whwh
             if det is not None and len(det):
                 # Rescale boxes from imgsz to im0 size
                 det[:, :4] = scale_coords(img.shape[2:], det[:, :4], im0.shape).round()
 
-                # Print results
-                for c in det[:, -1].unique():
-                    n = (det[:, -1] == c).sum()  # detections per class
-                    s += '%g %ss, ' % (n, names[int(c)])  # add to string
-
                 # Write results
-                for *xyxy, conf, cls in reversed(det):
+                for *xyxy, conf, _ in reversed(det):
                     area = (int(xyxy[2]) - int(xyxy[0])) * (int(xyxy[3]) - int(xyxy[1]))
-                    s += 'Area %s px ' % (area)
 
-                    label = '%s %.2f' % (names[int(cls)], conf)
-                    plot_one_box(xyxy, im0, label=label, color=colors[int(cls)])
+                    #yellow (0, 255, 255)
+                    # red (0, 0, 255)
+                    # green (0, 255, 0)
+
+                    print(area)
+
+                    if area < stop_sign_area_thres:
+                        color = (0, 0, 255)
+                    elif area == stop_sign_area_thres:
+                        color = (0, 255, 255)
+                    else: 
+                        color = (0, 255, 0)
+
+                    plot_one_box(xyxy, im0, label='stop sign %.2f' % (conf), color=color)
 
             # Print time (inference + NMS)
-            print(s, end='')
+            #print('%sDone. (%.3f FPS)' % (s, 1 / (t2 - t1)))
             cv2.imshow(p, im0)
 
             if cv2.waitKey(1) == ord('q'):  # q to quit
                 raise StopIteration
 
-    print('Done. (%.3f FPS)' % (1 / (time.time() - t0)))
-
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--cfg', type=str, default='conf/yolov4-custom-for-torch.cfg', help='*.cfg path')
-    parser.add_argument('--names', type=str, default='conf/obj.names', help='*.names path')
     parser.add_argument('--weights', type=str, default='weights/yolov4-custom-for-torch_best.pt', help='weights path')
     parser.add_argument('--source', type=str, default='0', help='source')  # input file/folder, 0 for webcam
     parser.add_argument('--img-size', type=int, default=512, help='inference size (pixels)')
@@ -112,7 +107,6 @@ if __name__ == '__main__':
     parser.add_argument('--augment', action='store_true', help='augmented inference')
     opt = parser.parse_args()
     opt.cfg = check_file(opt.cfg)  # check file
-    opt.names = check_file(opt.names)  # check file
     print(opt)
 
     with torch.no_grad():
