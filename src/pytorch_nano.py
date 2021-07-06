@@ -14,6 +14,11 @@ import torchvision.transforms as transforms
 import torch.nn.functional as F
 import PIL.Image
 
+from jetbot import Robot
+
+robot = Robot()
+robot.forward(0.3)
+
 stop_sign_area_thres = 30000
 
 def detect(save_img=False):
@@ -79,11 +84,12 @@ def detect(save_img=False):
                     print(area)
 
                     if area < stop_sign_area_thres:
-                        color = (0, 0, 255)
-                    elif area == stop_sign_area_thres:
-                        color = (0, 255, 255)
-                    else: 
                         color = (0, 255, 0)
+                        robot.stop()
+                        time.sleep(1.0)
+                        robot.forward()
+                    else: 
+                        color = (0, 0, 255)
 
                     plot_one_box(xyxy, im0, label='stop sign %.2f' % (conf), color=color)
 
