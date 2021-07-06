@@ -1,7 +1,7 @@
 import sys
 import argparse
-#repo_path = '/home/jose/Programming/aiml/tools/yolov3-archive'
-repo_path = '/home/jetbot/yolov3-archive'
+repo_path = '/home/jose/Programming/aiml/tools/yolov3-archive'
+#repo_path = '/home/jetbot/yolov3-archive'
 sys.path.insert(1, repo_path)
 
 from models import Darknet
@@ -103,7 +103,7 @@ if __name__ == '__main__':
     parser.add_argument('--cfg', type=str, default='conf/yolov4-custom-for-torch.cfg', help='*.cfg path')
     parser.add_argument('--names', type=str, default='conf/obj.names', help='*.names path')
     parser.add_argument('--weights', type=str, default='weights/yolov4-custom-for-torch_best.pt', help='weights path')
-    parser.add_argument('--source', type=str, default='data/samples', help='source')  # input file/folder, 0 for webcam
+    parser.add_argument('--source', type=str, default='0', help='source')  # input file/folder, 0 for webcam
     parser.add_argument('--img-size', type=int, default=512, help='inference size (pixels)')
     parser.add_argument('--conf-thres', type=float, default=0.3, help='object confidence threshold')
     parser.add_argument('--iou-thres', type=float, default=0.6, help='IOU threshold for NMS')
