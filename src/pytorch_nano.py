@@ -1,7 +1,7 @@
 import sys
 import argparse
-repo_path = '/home/jose/Programming/aiml/tools/yolov3-archive'
-#repo_path = '/home/jetbot/yolov3-archive'
+#repo_path = '/home/jose/Programming/aiml/tools/yolov3-archive'
+repo_path = '/home/jetbot/yolov3-archive'
 sys.path.insert(1, repo_path)
 
 from models import Darknet
@@ -17,9 +17,8 @@ import PIL.Image
 from jetbot import Robot
 
 robot = Robot()
-robot.forward(0.3)
 
-stop_sign_area_thres = 30000
+stop_sign_area_thres = 2000
 
 def detect(save_img=False):
     imgsz = opt.img_size  # (320, 192) or (416, 256) or (608, 352) for (height, width)
@@ -83,21 +82,22 @@ def detect(save_img=False):
 
                     print(area)
 
-                    if area < stop_sign_area_thres:
-                        color = (0, 255, 0)
+                    if area <= stop_sign_area_thres:
                         robot.stop()
-                        time.sleep(1.0)
-                        robot.forward()
+                        time.sleep(1)
+                        robot.forward(0.3)
                     else: 
-                        color = (0, 0, 255)
+                        robot.forward(0.3)
 
-                    plot_one_box(xyxy, im0, label='stop sign %.2f' % (conf), color=color)
-
+                    plot_one_box(xyxy, im0, label='stop sign %.2f' % (conf), color=(255, 0, 0))
+            else:
+                robot.forward(0.3)
             # Print time (inference + NMS)
             #print('%sDone. (%.3f FPS)' % (s, 1 / (t2 - t1)))
             cv2.imshow(p, im0)
 
             if cv2.waitKey(1) == ord('q'):  # q to quit
+                robot.stop()
                 raise StopIteration
 
 if __name__ == '__main__':
