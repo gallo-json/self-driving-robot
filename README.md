@@ -1,6 +1,6 @@
 # Self Driving Robot
 
-Right now the robot can only detect stop signs and act accordingly. The specifics for this mini-project are in the [stop-sign branch](https://github.com/gallo-json/self-driving-robot/tree/stop-sign) of this repo.
+Right now the robot can only detect stop signs, not traffic lights. The specifics are in the [stop-sign branch](https://github.com/gallo-json/self-driving-robot/tree/stop-sign) of this repo.
 
 ## Powered by
 ![](resources/tech-stack.png)
