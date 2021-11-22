@@ -81,9 +81,10 @@ def detect(save_img=False):
 
                     if area < stop_sign_area_thres:
                         robot.forward(speed)
-                    elif (stop_sign_area_thres - 100) < area and area < (stop_sign_area_thres + 100): 
+                    elif (stop_sign_area_thres - 500) < area and area < (stop_sign_area_thres + 500): 
                         robot.stop()
-                        time.sleep(3)
+                        time.sleep(2)
+                        robot.forward(speed)
                     else:
                         robot.forward(speed)
 
