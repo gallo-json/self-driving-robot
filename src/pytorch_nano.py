@@ -81,11 +81,11 @@ def detect(save_img=False):
 
                     if area < stop_sign_area_thres:
                         robot.forward(speed)
-                    elif (stop_sign_area_thres - 10) < area and area < (stop_sign_area_thres + 10): 
+                    elif (stop_sign_area_thres - 100) < area and area < (stop_sign_area_thres + 100): 
                         robot.stop()
-                        time.sleep(2)
+                        time.sleep(3)
                     else:
-                        robot.forward()
+                        robot.forward(speed)
 
                     plot_one_box(xyxy, im0, label='stop sign %.2f' % (conf), color=(0, 0, 255))
                     
