@@ -17,9 +17,9 @@ import PIL.Image
 from jetbot import Robot
 
 robot = Robot()
-robot.forward(0.3)
 
-stop_sign_area_thres = 30000
+speed = 0.3
+stop_sign_area_thres = 2000
 
 def detect(save_img=False):
     imgsz = opt.img_size  # (320, 192) or (416, 256) or (608, 352) for (height, width)
@@ -77,21 +77,16 @@ def detect(save_img=False):
                 for *xyxy, conf, _ in reversed(det):
                     area = (int(xyxy[2]) - int(xyxy[0])) * (int(xyxy[3]) - int(xyxy[1]))
 
-                    #yellow (0, 255, 255)
-                    # red (0, 0, 255)
-                    # green (0, 255, 0)
-
                     print(area)
 
                     if area < stop_sign_area_thres:
-                        color = (0, 255, 0)
+                        robot.forward(speed)
+                    elif (stop_sign_area_thres - 10) < area and area < (stop_sign_area_thres + 10): 
                         robot.stop()
-                        time.sleep(1.0)
+                    else:
                         robot.forward()
-                    else: 
-                        color = (0, 0, 255)
 
-                    plot_one_box(xyxy, im0, label='stop sign %.2f' % (conf), color=color)
+                    plot_one_box(xyxy, im0, label='stop sign %.2f' % (conf), color=(0, 0, 255))
 
             # Print time (inference + NMS)
             #print('%sDone. (%.3f FPS)' % (s, 1 / (t2 - t1)))
