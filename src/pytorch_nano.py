@@ -18,10 +18,7 @@ from jetbot import Robot
 
 robot = Robot()
 
-<<<<<<< HEAD
 speed = 0.3
-=======
->>>>>>> 1a9f2fa5aab0404e42c4b1d4c6487b343c707a14
 stop_sign_area_thres = 2000
 
 def detect(save_img=False):
