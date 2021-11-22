@@ -79,19 +79,23 @@ def detect(save_img=False):
 
                     print(area)
 
+                    # If the stop sign is still far away, continue moving forward
                     if area < stop_sign_area_thres:
                         robot.forward(speed)
+                    
+                    # If the stop sign is within that certain threshold, stop for 2 seconds, then continue moving forward
                     elif (stop_sign_area_thres - 500) < area and area < (stop_sign_area_thres + 500): 
                         robot.stop()
                         time.sleep(2)
                         robot.forward(speed)
+                    # Anything else (eg: stop sign is too close/has already been passed), continue moving forward
                     else:
                         robot.forward(speed)
 
                     plot_one_box(xyxy, im0, label='stop sign %.2f' % (conf), color=(0, 0, 255))
                     
-            # Print time (inference + NMS)
-            #print('%sDone. (%.3f FPS)' % (s, 1 / (t2 - t1)))
+            # Print time taken for inference + NMS
+            # print('%sDone. (%.3f FPS)' % (s, 1 / (t2 - t1)))
             cv2.imshow(p, im0)
 
             if cv2.waitKey(1) == ord('q'):  # q to quit
