@@ -1,7 +1,7 @@
 import sys
 import argparse
-repo_path = '/home/jose/Programming/aiml/tools/yolov3-archive'
-#repo_path = '/home/jetbot/yolov3-archive'
+#repo_path = '/home/jose/Programming/aiml/tools/yolov3-archive'
+repo_path = '/home/jetbot/yolov3-archive'
 sys.path.insert(1, repo_path)
 
 from models import Darknet
@@ -18,7 +18,10 @@ from jetbot import Robot
 
 robot = Robot()
 
+<<<<<<< HEAD
 speed = 0.3
+=======
+>>>>>>> 1a9f2fa5aab0404e42c4b1d4c6487b343c707a14
 stop_sign_area_thres = 2000
 
 def detect(save_img=False):
@@ -87,12 +90,13 @@ def detect(save_img=False):
                         robot.forward()
 
                     plot_one_box(xyxy, im0, label='stop sign %.2f' % (conf), color=(0, 0, 255))
-
+                    
             # Print time (inference + NMS)
             #print('%sDone. (%.3f FPS)' % (s, 1 / (t2 - t1)))
             cv2.imshow(p, im0)
 
             if cv2.waitKey(1) == ord('q'):  # q to quit
+                robot.stop()
                 raise StopIteration
 
 if __name__ == '__main__':
