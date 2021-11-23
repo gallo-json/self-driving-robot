@@ -1,6 +1,6 @@
 # Self Driving Robot
 
-Right now the robot can only detect stop signs, not traffic lights. The specifics are in the [stop-sign branch](https://github.com/gallo-json/self-driving-robot/tree/stop-sign) of this repo.
+Right now I've only implemented stop sign detection, not traffic lights. The robot can detect and classify if the traffic light is red, yellow, or green, but it cannot act upon those decisions just yet. The specifics are in the [stop-sign branch](https://github.com/gallo-json/self-driving-robot/tree/stop-sign) of this repo.
 
 ## Powered by
 ![](resources/tech-stack.png)
@@ -20,7 +20,7 @@ FP16 TensorRT engine reached ~2 FPS.
 
 ### On the computer SSHing into the Jetson Nano
 
-If worst comes to worst and the Nano cannot run the model smoothly, I can use my NVIDA GPU laptop that controls the Nano. The Nano sends the live camera feed to the laptop, the laptop does all the inference then sends back the labels where then the Nano parses that and moves the motors accordingly.
+If worst comes to worst and the Nano cannot run the model smoothly, I can use my NVIDIA GPU laptop that controls the Nano. The Nano sends the live camera feed to the laptop, the laptop does all the inference then sends back the labels where then the Nano parses that and moves the motors accordingly.
 
 ## Road following
 
@@ -30,7 +30,7 @@ NVIDIA AI IOT already has source code for this. All that is left is to combine b
 
 ### Why can't you just use YOLOv4-tiny?
 
-Probably be better to do so.
+Probably be better to do so. YOLOv4-tiny is much smaller than YOLOv3 but I would have to train a new model again.
 
 ### Why is the PyTorch model better than the TensorRT engine?
 
