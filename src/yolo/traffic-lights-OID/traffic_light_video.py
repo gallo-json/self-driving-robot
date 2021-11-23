@@ -6,7 +6,7 @@ red_color = (0, 0, 255)
 yellow_color = (0, 255, 255)
 green_color = (0, 255, 0)
 
-net = cv2.dnn.readNet("weights/yolov4-custom_best.weights", "conf/yolov4-custom.cfg")
+net = cv2.dnn.readNet("src/weights/yolov4-custom_best.weights", "src/yolo/traffic-lights-OID/conf/yolov4-custom.cfg")
 net.setPreferableBackend(cv2.dnn.DNN_BACKEND_CUDA)
 net.setPreferableTarget(cv2.dnn.DNN_TARGET_CUDA)
 

@@ -3,7 +3,7 @@ import cv2
 import time
 import matplotlib.pyplot as plt
 
-net = cv2.dnn.readNet("weights/yolov4-custom_best.weights", "conf/yolov4-custom.cfg")
+net = cv2.dnn.readNet("/home/jose/Downloads/yolov4-custom_best.weights", "/home/jose/Downloads/yolov4-custom.cfg")
 net.setPreferableBackend(cv2.dnn.DNN_BACKEND_CUDA)
 net.setPreferableTarget(cv2.dnn.DNN_TARGET_CUDA)
 
@@ -16,7 +16,7 @@ green_color = (0, 255, 0)
 
 font = cv2.FONT_HERSHEY_PLAIN
 
-frame = cv2.imread('pictures/yellow.jpg')
+frame = cv2.imread('src/yolo/traffic-lights-OID/pictures/yellow.jpg')
 original = np.copy(frame)
 
 height, width, channels = frame.shape
