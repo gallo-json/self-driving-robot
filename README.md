@@ -5,6 +5,7 @@ Right now I've only implemented stop sign detection, not traffic lights. The rob
 ## Motivation
 
 I wanted to see if I could build a miniature version of a self-driving car: a robot that could detect obstacles, stop on stop signs, wait on traffic lights, etc. Of course, this scaled-down project is much simpler than a real self-driving car, but the experience was fun.
+
 ![](resources/real-self-driving-car.gif)
 
 ## Overview
@@ -14,7 +15,7 @@ The goals for this self-driving robot were:
 - To stop and wait 2 seconds at a stop sign
 - To stop at a red light, and wait until the light turns green
 - To continue moving forward at a green light
-- To follow the road
+- To follow the road at all times
 
 Detecting the stop signs as well as a red, yellow, or green traffic light can be done with one YOLO model. NVIDIA has open-source code for the road following part, which is done using a ResNet model. Combining both enables me to achieve all of the above tasks. 
 
@@ -35,9 +36,12 @@ The NVIDIA JetBot is a small robot kit that comes with the powerful NVIDIA Jetso
 
 ## Training
 
-The weight files for the models are too large therefore I cannot include them in this repo.
+I trained the YOLOv3 model on the Google Cloud, using pictures of real stop signs & traffic lights, as well as the ones I took of my miniature versions. This way I get more variety and so the robot can detect my scaled-down versions of these obstacles.
 
-I trained the YOLOv3 model on the Google Cloud, using pictures of real stop signs & traffic lights, as well as the ones I took of my miniature versions.
+![](resources/stop-sign.jpeg)
+![](resources/traffic-lights.jpg)
+
+The weight files for the models are too large therefore I cannot include them in this repo.
 
 ## Inference
 ### Directly on the Jetson Nano
