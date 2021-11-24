@@ -5,7 +5,6 @@ Right now I've only implemented stop sign detection, not traffic lights. The rob
 ## Motivation
 
 ![](resources/real-self-driving-car.gif)
-![](resources/my-self-driving-robot.gif)
 
 ## Powered by
 ![](resources/tech-stack.png)
