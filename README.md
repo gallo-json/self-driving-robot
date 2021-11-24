@@ -2,6 +2,11 @@
 
 Right now I've only implemented stop sign detection, not traffic lights. The robot can detect and classify if the traffic light is red, yellow, or green, but it cannot act upon those decisions just yet. The specifics are in the [stop-sign branch](https://github.com/gallo-json/self-driving-robot/tree/stop-sign) of this repo.
 
+## Motivation
+
+![](resources/real-self-driving-car.gif)
+![](resources/my-self-driving-robot.gif)
+
 ## Powered by
 ![](resources/tech-stack.png)
 
