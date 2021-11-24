@@ -44,10 +44,16 @@ I have no clue, they're using same CUDA device, same inference dimensions, same 
 
 Torch2trt natively does not support some of the layers in YOLO, which means I would have to create layer converters and I do not want to go down that rabbit hole. Maybe for a future project.
 
-## Useful repositories
+## Useful repositories and helpful links
 
 JetBot: https://github.com/NVIDIA-AI-IOT/jetbot
 
 TensorRT demos: https://github.com/jkjung-avt/tensorrt_demos
 
 YOLO in PyTorch: https://github.com/ultralytics/yolov3/tree/archive
+
+YOLO with Jetson Nano Camera Protocol: https://github.com/gallo-json/yolov3-jetson-nano 
+
+JetCam: https://github.com/NVIDIA-AI-IOT/jetcam
+
+Training custom YOLOv3 model with Google Cloud: https://www.youtube.com/watch?v=10joRJt39Ns 
