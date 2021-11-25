@@ -8,6 +8,8 @@ I wanted to see if I could build a miniature version of a self-driving car: a ro
 
 ![](resources/real-self-driving-car.gif)
 
+![](resources/stop.gif)
+
 ## Overview
 
 The goals for this self-driving robot were:
