@@ -4,7 +4,7 @@
 
 This branch of the repo only manages the stop sign detection part, which was to stop and wait 2 seconds at a stop sign. Detecting the stop signs was done with a custom YOLOv3 model.
 
-![](resources/detecting-stop-sign.gif)
+![](resources/stop.gif)
 
 This was the only task I was fully able to complete. I explain why in my [reflection](resources/Reflection.md), as well as other obstacles I faced.
 
