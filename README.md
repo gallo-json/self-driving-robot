@@ -1,7 +1,5 @@
 # Self Driving Robot
 
-Right now I've only implemented stop sign detection, not traffic lights. The robot can detect and classify if the traffic light is red, yellow, or green, but it cannot act upon those decisions just yet. The specifics are in the [stop-sign branch](https://github.com/gallo-json/self-driving-robot/tree/stop-sign) of this repo.
-
 ## Motivation
 
 I wanted to see if I could build a miniature version of a self-driving car: a robot that could detect obstacles, stop on stop signs, wait on traffic lights, etc. Of course, this scaled-down project is much simpler than a real self-driving car, but the experience was fun.
@@ -28,6 +26,8 @@ I was successful in completing all these tasks individually, but never managed t
 ## Results
 
 Video: https://www.youtube.com/watch?v=9wnvsFO_PbQ
+
+Received NVIDIA AI JetBot Specialist certificate.
 
 ## Powered by
 ![](resources/tech-stack.png)
@@ -68,11 +68,11 @@ If worst comes to worst and the Nano cannot run the model smoothly, I can use my
 
 ## Questions
 
-### Why can't you just use YOLOv4-tiny?
+### Why not YOLOv4-tiny?
 
-Probably be better to do so. YOLOv4-tiny is much smaller than YOLOv3 but I would have to train a new model again.
+YOLOv4-tiny is much smaller than YOLOv3 but I would have to train a new model again. YOLOv4 and v5 models are trained in a different manner.
 
-### Why is the PyTorch model better than the TensorRT engine?
+### Why does the PyTorch model perform better than the TensorRT engine?
 
 I have no clue, they're using same CUDA device, same inference dimensions, same YOLO cfg file, etc. But I'm not complaining since its easier to deploy alongside the other road following PyTorch model.
 
